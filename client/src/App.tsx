@@ -3,11 +3,14 @@ import "./App.css";
 import { Dashboard, Login, Products } from "./pages";
 import { Topbar } from "./components/layout/Topbar";
 import { Sidebar } from "./components/layout/Sidebar";
+import { ToastContainer,  } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
       <BrowserRouter>
+        <ToastContainer position="top-center" closeOnClick />
         <Routes>
           <Route
             path="*"

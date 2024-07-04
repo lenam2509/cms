@@ -18,13 +18,28 @@ import {
 } from "../ui/sheet";
 import { Link, useNavigate } from "react-router-dom";
 import { Links } from "../../contans";
+import http from "../../config/http";
+import { toast } from "react-toastify";
+import { useUserStore } from "../../stores/userStore";
 
 export const Topbar = () => {
   const [time, setTime] = useState(new Date());
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userfromStore = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
 
-  const logout = () => {
-    navigate("/login");
+  const logout = async () => {
+    const res = await http.post("/api/auth/logout");
+    if (res.status === 200 || res.status === 201) {
+      setUser(null);
+      localStorage.removeItem("token");
+      toast.success("Đăng xuất thành công");
+      navigate("/login");
+    } else {
+      toast.error("Đăng xuất thất bại lỗi server");
+      console.log(res);
+    }
   };
 
   useEffect(() => {
@@ -84,7 +99,9 @@ export const Topbar = () => {
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-1 cursor-pointer">
               <FaUser />
-              <span className="text-sm font-bold">lenam2509</span>
+              <span className="text-sm font-bold">
+                {userfromStore?.name || "User"}
+              </span>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className=" text-red-500 font-bold">

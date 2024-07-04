@@ -24,6 +24,7 @@ app.use(morgan('dev'));
 
 
 app.use('/api/users', require('./routes/user.route'));
+app.use('/api/auth', require('./routes/auth.route'));
 
 
 
