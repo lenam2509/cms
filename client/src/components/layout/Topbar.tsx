@@ -41,10 +41,11 @@ export const Topbar = () => {
     }
   };
 
-  if (!userfromStore) {
-    toast.error("Vui lòng đăng nhập");
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!userfromStore) {
+      navigate("/login");
+    }
+  }, [userfromStore, navigate]);
 
   useEffect(() => {
     const interval = setInterval(() => {
