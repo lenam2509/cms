@@ -41,6 +41,11 @@ export const Topbar = () => {
     }
   };
 
+  if (!userfromStore) {
+    toast.error("Vui lòng đăng nhập");
+    navigate("/login");
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date());
