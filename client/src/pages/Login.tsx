@@ -36,6 +36,7 @@ export const Login = () => {
       .post("/api/auth/login", data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
+          reset();
           localStorage.setItem("token", res.data.token);
           setUser({
             email: res.data.email,

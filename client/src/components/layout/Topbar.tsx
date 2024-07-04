@@ -25,7 +25,6 @@ import { useUserStore } from "../../stores/userStore";
 export const Topbar = () => {
   const [time, setTime] = useState(new Date());
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userfromStore = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
 
