@@ -23,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 
+app.use('/api/users', require('./routes/user.route'));
+
 
 
 
