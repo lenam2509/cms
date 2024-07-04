@@ -4,8 +4,8 @@ const app = express()
 
 const port = 3000
 
-app.get('/', (req, res) => {
-  res.send('API IS READY!')
+app.get('/api', (req, res) => {
+  res.json({ message: 'Hello from server!' })
 })
 
 app.listen(port, () => {
