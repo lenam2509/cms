@@ -14,7 +14,11 @@ app.use(morgan('dev'));
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.send('Server is ready');
+});
+
+app.get('/api', (req, res) => {
+    res.json('API is ready')
 });
 
 app.listen(3000, () => {
