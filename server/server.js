@@ -28,6 +28,7 @@ app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
     res.send('Server is ready');
+    console.log(process.env.MONGO_URI);
 });
 
 app.get('/api', (req, res) => {
