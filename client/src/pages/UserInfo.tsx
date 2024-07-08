@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
 import { Button } from "../components/ui/button";
+import http from "../config/http";
 
 const UserSchema = z.object({
   id: z.string(),
@@ -36,13 +37,14 @@ export const UserInfo = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    // setsubmitting(true)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(console.table(data));
-        setEditMode(false);
-      }, 2000);
-    });
+    http
+      .put("/api/users/update", data)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   return (

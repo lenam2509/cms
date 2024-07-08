@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import http from "../config/http";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useUserStore } from "../stores/userStore";
 import { FaSpinner } from "react-icons/fa";
+import { useGlobalAlertStore } from "../stores/globalAlert";
 
 const LoginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
@@ -22,7 +22,9 @@ type LoginType = z.infer<typeof LoginSchema>;
 
 export const Login = () => {
   const setUser = useUserStore((state) => state.setUser);
+  const setAlert = useGlobalAlertStore((state) => state.setAlert);
   const navigate = useNavigate();
+  
   const {
     register,
     handleSubmit,
@@ -45,12 +47,18 @@ export const Login = () => {
             isAdmin: res.data.isAdmin,
             name: res.data.name,
           });
-          toast.success("Login success");
+          setAlert({
+            message: "Login success",
+            type: "success",
+          });
           navigate("/dashboard");
         }
       })
       .catch((err) => {
-        toast.error(err.response.data.message || "Login failed");
+        setAlert({
+          message: err.response.data.message || "Login failed",
+          type: "error",
+        });
       });
   });
 

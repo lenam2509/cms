@@ -19,32 +19,44 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Links } from "../../contans";
 import http from "../../config/http";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { useUserStore } from "../../stores/userStore";
 import { Timer } from "./Timer";
+import { useGlobalAlertStore } from "../../stores/globalAlert";
 
 export const Topbar = () => {
   const navigate = useNavigate();
   const userfromStore = useUserStore((state) => state.user);
+  const setAlert = useGlobalAlertStore((state) => state.setAlert);
   const setUser = useUserStore((state) => state.setUser);
   const logout = async () => {
     const res = await http.post("/api/auth/logout");
     if (res.status === 200 || res.status === 201) {
       setUser(null);
       localStorage.removeItem("token");
-      toast.success("Đăng xuất thành công");
-      navigate("/login");
+      setAlert({
+        message: "Đăng xuất thành công",
+        type: "success",
+      });
+      return navigate("/login");
     } else {
-      toast.error("Đăng xuất thất bại lỗi server");
-      console.log(res);
+      return setAlert({
+        message: res.data.message || "Đăng xuất thất bại",
+        type: "error",
+      });
     }
   };
 
   useEffect(() => {
-    if (!userfromStore) {
+    if (!userfromStore && !localStorage.getItem("token")) {
       navigate("/login");
+      setAlert({
+        message: "Vui lòng đăng nhập",
+        type: "error",
+      });
     }
-  }, [userfromStore, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="bg-slate-200 min-h-[50px] border-b border-black flex items-center justify-between px-4 ">
