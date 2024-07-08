@@ -53,7 +53,8 @@ exports.updateInfo = async (req, res) => {
             email: email
         });
         return res.status(200).json({
-            message: 'Cập nhật thông tin thành công'
+            name: name,
+            email: email,
         });
 
     } catch (error) {
@@ -66,7 +67,7 @@ exports.findOne = async (req, res) => {
     try {
         const user = await userSchema.findOne({
             _id: id,
-        },{ password: 0});
+        }, { password: 0 });
         if (!user) {
             return res.status(400).json({ message: 'Người dùng không tồn tại' });
         }

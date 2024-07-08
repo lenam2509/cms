@@ -6,12 +6,13 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
 import { Button } from "../components/ui/button";
+import { useGlobalAlertStore } from "../stores/globalAlert";
 import http from "../config/http";
 
 const UserSchema = z.object({
   id: z.string(),
   name: z.string().min(6, "Tên không được để trống và phải dài hơn 6 ký tự"),
-  email: z.string().email({ message: "Email không hợp lệ" }),
+  email: z.string().email("Email không hợp lệ"),
 });
 
 type UserType = z.infer<typeof UserSchema>;
@@ -19,6 +20,7 @@ type UserType = z.infer<typeof UserSchema>;
 export const UserInfo = () => {
   const user = useUserStore((state) => state.user);
   const [editMode, setEditMode] = useState(false);
+  const { setAlert } = useGlobalAlertStore();
 
   const {
     register,
@@ -38,9 +40,14 @@ export const UserInfo = () => {
 
   const onSubmit = handleSubmit((data) => {
     http
-      .put("/api/users/update", data)
+      .put("/api/users/updateInfo", data)
       .then((res) => {
-        console.log(res.data);
+        if (res.status === 200 || res.status === 201) {
+          setAlert({
+            message: "Cập nhật thông tin thành công",
+            type: "success",
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
