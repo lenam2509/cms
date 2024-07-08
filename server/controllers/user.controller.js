@@ -60,3 +60,18 @@ exports.updateInfo = async (req, res) => {
         return res.status(400).json({ message: error.message });
     }
 }
+
+exports.findOne = async (req, res) => {
+    const { id } = req.query;
+    try {
+        const user = await userSchema.findOne({
+            _id: id,
+        },{ password: 0});
+        if (!user) {
+            return res.status(400).json({ message: 'Người dùng không tồn tại' });
+        }
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
