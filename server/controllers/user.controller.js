@@ -45,17 +45,14 @@ exports.updateInfo = async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: 'Người dùng không tồn tại' });
         }
-        // update user
-        await userSchema.updateOne({
-            _id: id
+        // update user and return new user
+        const newUser = await userSchema.findOneAndUpdate({
+            _id: id,
         }, {
-            name: name,
-            email: email
-        });
-        return res.status(200).json({
-            name: name,
-            email: email,
-        });
+            name,
+            email,
+        }, { new: true, fields: { password: 0 } });
+        return res.status(200).json(newUser);
 
     } catch (error) {
         return res.status(400).json({ message: error.message });

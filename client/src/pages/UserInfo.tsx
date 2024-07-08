@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Switch } from "../components/ui/switch";
 import { useUserStore } from "../stores/userStore";
-import { z } from "zod";
+import { set, z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
@@ -19,6 +19,7 @@ type UserType = z.infer<typeof UserSchema>;
 
 export const UserInfo = () => {
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
   const [editMode, setEditMode] = useState(false);
   const { setAlert } = useGlobalAlertStore();
 
@@ -39,13 +40,20 @@ export const UserInfo = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    http
+    return http
       .put("/api/users/updateInfo", data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setAlert({
             message: "Cập nhật thông tin thành công",
             type: "success",
+          });
+          setEditMode(false);
+          setUser({
+            id: user?.id || "",
+            email: data.email,
+            name: data.name,
+            isAdmin: user?.isAdmin || false,
           });
         }
       })
