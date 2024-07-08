@@ -50,10 +50,10 @@ export const UserInfo = () => {
           });
           setEditMode(false);
           setUser({
-            id: user?.id || "",
-            email: data.email,
-            name: data.name,
-            isAdmin: user?.isAdmin || false,
+            id: res.data._id,
+            name: res.data.name,
+            email: res.data.email,
+            isAdmin: res.data.isAdmin || false,
           });
         }
       })
