@@ -26,4 +26,37 @@ exports.addUser = async (req, res) => {
     }
 }
 
+exports.updateInfo = async (req, res) => {
+    const { name, email, id } = req.body;
+    try {
+        // check token
+        const freshToken = req.headers['authorization']
+        if (!freshToken) {
+            return res.status(400).json({ message: 'Token không tồn tại' });
+        }
+        const token = freshToken.split(' ')[1];
+        if (!token) {
+            return res.status(400).json({ message: 'Token không hợp lệ' });
+        }
+        // check user
+        const user = await userSchema.findOne({
+            _id: id,
+        });
+        if (!user) {
+            return res.status(400).json({ message: 'Người dùng không tồn tại' });
+        }
+        // update user
+        await userSchema.updateOne({
+            _id: id
+        }, {
+            name: name,
+            email: email
+        });
+        return res.status(200).json({
+            message: 'Cập nhật thông tin thành công'
+        });
 
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}

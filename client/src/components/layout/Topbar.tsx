@@ -1,6 +1,6 @@
 import { FaUser, FaBell, FaBars } from "react-icons/fa";
 import { Badge } from "../ui/badge";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,13 +21,12 @@ import { Links } from "../../contans";
 import http from "../../config/http";
 import { toast } from "react-toastify";
 import { useUserStore } from "../../stores/userStore";
+import { Timer } from "./Timer";
 
 export const Topbar = () => {
-  const [time, setTime] = useState(new Date());
   const navigate = useNavigate();
   const userfromStore = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
-
   const logout = async () => {
     const res = await http.post("/api/auth/logout");
     if (res.status === 200 || res.status === 201) {
@@ -46,13 +45,6 @@ export const Topbar = () => {
       navigate("/login");
     }
   }, [userfromStore, navigate]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="bg-slate-200 min-h-[50px] border-b border-black flex items-center justify-between px-4 ">
@@ -87,8 +79,7 @@ export const Topbar = () => {
             </div>
           </SheetContent>
         </Sheet>
-        <span>{time.toLocaleTimeString()}</span>
-        <span>{time.toLocaleDateString()}</span>
+        <Timer />
       </div>
       <div className="flex items-center gap-4 text-lg">
         <div className="relative">
@@ -110,8 +101,8 @@ export const Topbar = () => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className=" text-red-500 font-bold">
-            <DropdownMenuItem className="cursor-pointer">
-              Thông tin cá nhân
+            <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link to={"/user-info"}>Thông tin cá nhân</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <hr />

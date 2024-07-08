@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Dashboard, Login, Products } from "./pages";
+import { Dashboard, Login, Products, UserInfo, Users } from "./pages";
 import { Topbar } from "./components/layout/Topbar";
 import { Sidebar } from "./components/layout/Sidebar";
-import { ToastContainer,  } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -23,6 +23,8 @@ function App() {
                     <Routes>
                       <Route index element={<Dashboard />} />
                       <Route path="products" element={<Products />} />
+                      <Route path="users" element={<Users />} />
+                      <Route path="user-info" element={<UserInfo />} />
                     </Routes>
                   </main>
                 </div>

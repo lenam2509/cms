@@ -8,6 +8,7 @@ import http from "../config/http";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUserStore } from "../stores/userStore";
+import { FaSpinner } from "react-icons/fa";
 
 const LoginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
@@ -32,7 +33,7 @@ export const Login = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    http
+    return http
       .post("/api/auth/login", data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
@@ -45,12 +46,11 @@ export const Login = () => {
             name: res.data.name,
           });
           toast.success("Login success");
-          navigate("/");
+          navigate("/dashboard");
         }
       })
       .catch((err) => {
         toast.error(err.response.data.message || "Login failed");
-        console.log(err);
       });
   });
 
@@ -89,7 +89,17 @@ export const Login = () => {
             <span className="text-red-500">{errors.password.message}</span>
           )}
         </div>
-        <Button type="submit">{isSubmitting ? "Loading..." : "Login"}</Button>
+        <Button disabled={isSubmitting} type="submit">
+          {isSubmitting ? (
+            <>
+              <div className="animate-spin p-1">
+                <FaSpinner />
+              </div>
+            </>
+          ) : (
+            "Login"
+          )}
+        </Button>
       </form>
     </div>
   );
