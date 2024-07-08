@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Switch } from "../components/ui/switch";
 import { useUserStore } from "../stores/userStore";
-import { set, z } from "zod";
+import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
